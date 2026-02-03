@@ -1,0 +1,12 @@
+# OS
+.DS_Store
+
+# Office / Word temp files
+~$*.docx
+*.tmp
+
+# (Optional) local env files
+.env
+
+# Local-only notes (do not commit)
+_local_notes/
