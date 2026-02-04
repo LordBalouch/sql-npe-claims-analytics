@@ -10,3 +10,10 @@ Checklist:
 - [ ] DB GUI installed/confirmed (DBeaver)
 - [ ] PostgreSQL installed/running (or MySQL alternative)
 - [ ] Empty database created: `npe_claims_demo`
+
+cd /Users/babak/Desktop/Data-Analysis/portfolio_projects/sql-npe-claims-analytics
+git status
+git add docs/session_log.md
+git commit -m "Part 2: document schema verification"
+git push
+git log -1 --oneline
