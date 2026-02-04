@@ -140,27 +140,26 @@ LIMIT 10;
 -- Output: average days (numeric), overall + by region
 -- ------------------------------------------------------------
 
--- Q9a. Overall
+
+-- Q9a. Overall average processing time (days)
 SELECT
-  ROUND(
-    AVG(EXTRACT(EPOCH FROM (decision_date - received_date)) / 86400.0)
-  , 2) AS avg_processing_days
+  ROUND(AVG((decision_date - received_date)::numeric), 2) AS avg_processing_days
 FROM claims
 WHERE status = 'Closed'
   AND decision_date IS NOT NULL;
 
--- Q9b. By region
+
+-- Q9b. By region average processing time (days)
 SELECT
   region,
   COUNT(*) AS closed_claims,
-  ROUND(
-    AVG(EXTRACT(EPOCH FROM (decision_date - received_date)) / 86400.0)
-  , 2) AS avg_processing_days
+  ROUND(AVG((decision_date - received_date)::numeric), 2) AS avg_processing_days
 FROM claims
 WHERE status = 'Closed'
   AND decision_date IS NOT NULL
 GROUP BY region
 ORDER BY avg_processing_days DESC, closed_claims DESC;
+
 
 -- ------------------------------------------------------------
 -- Q10. Top 10 medical codes
