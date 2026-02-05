@@ -1,4 +1,4 @@
--- Part 3: Synthetic seed data for npe_claims_demo
+-- Synthetic seed data for npe_claims_demo
 -- Rerun-friendly + constraint-safe
 -- Engine: PostgreSQL 16
 
@@ -99,8 +99,12 @@ FROM n;
 
 -- 3) Claims (target 1200) ----------------------------------------------------
 
-WITH p AS (
-  SELECT provider_id FROM providers
+WITH prov AS (
+  SELECT
+    provider_id,
+    row_number() OVER (ORDER BY provider_id) AS rn,
+    count(*) OVER () AS n
+  FROM providers
 ),
 base AS (
   SELECT
@@ -138,9 +142,16 @@ base AS (
       WHEN random() < 0.985 THEN 'Finnmark'
       ELSE 'Other'
     END AS region,
-    (SELECT provider_id FROM p ORDER BY random() LIMIT 1) AS provider_id
+    pr.provider_id
   FROM generate_series(1, 1200) AS gs
+  JOIN LATERAL (
+    SELECT provider_id
+    FROM prov
+    WHERE rn = ((gs - 1) % n) + 1
+  ) pr ON true
 ),
+
+
 closed_enriched AS (
   SELECT
     b.*,
@@ -213,15 +224,20 @@ SELECT
   x.medical_code_id,
   CASE WHEN x.rn = 1 THEN 'Primary' ELSE 'Secondary' END AS code_role
 FROM claims c
+CROSS JOIN LATERAL (
+  SELECT ((c.claim_id % 3) + 1)::int AS n_codes   -- GUARANTEED 1..3
+) k
 JOIN LATERAL (
   SELECT
     mc.medical_code_id,
     row_number() OVER () AS rn
   FROM medical_codes mc
   WHERE mc.active = true
-  ORDER BY random()
-  LIMIT (1 + floor(random() * 3))::int
+  ORDER BY random(), c.claim_id
+  LIMIT k.n_codes
 ) x ON true;
+
+
 
 -- claim_injuries: 1–2 injuries per claim
 INSERT INTO claim_injuries (claim_id, injury_type_id, is_primary)
@@ -230,15 +246,20 @@ SELECT
   x.injury_type_id,
   (x.rn = 1) AS is_primary
 FROM claims c
+CROSS JOIN LATERAL (
+  SELECT ((c.claim_id % 2) + 1)::int AS n_inj     -- GUARANTEED 1..2
+) k
 JOIN LATERAL (
   SELECT
     it.injury_type_id,
     row_number() OVER () AS rn
   FROM injury_types it
   WHERE it.active = true
-  ORDER BY random()
-  LIMIT (1 + floor(random() * 2))::int
+  ORDER BY random(), c.claim_id
+  LIMIT k.n_inj
 ) x ON true;
+
+
 
 -- 5) Verification section ----------------------------------------------------
 
