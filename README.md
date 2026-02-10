@@ -1,21 +1,30 @@
 # SQL NPE Claims Analytics (Synthetic)
 
-SQL-first portfolio project that demonstrates basic → intermediate SQL skills in a realistic healthcare/claims setting using a clean relational schema, reproducible seed data, and report-ready views.
+## Overview
+I built a SQL-first claims analytics project using a synthetic dataset inspired by an insurance claims workflow.
+PostgreSQL is the source of truth: I generate the dataset, run analytics queries, and expose a reporting layer as SQL views.
+Power BI consumes only those views (no base tables) to produce an executive-ready dashboard.
 
-## Tech (Part 1)
-- Database: PostgreSQL (default)
-- GUI: DBeaver (default)
-- Local DB name: `npe_claims_demo`
+## Tech stack
+- PostgreSQL 16
+- SQL (schema, seed, analytics queries, reporting views)
+- Power BI Desktop (Windows) — report consumes SQL views only
+- Git / GitHub
 
-## How to run (file order)
-1. Create an empty database named `npe_claims_demo`
-2. Run SQL files in this order:
-   - `sql/01_schema.sql` (Part 2)
-   - `sql/02_seed_data.sql` (Part 3)
-   - `sql/03_queries_basic.sql` (Part 4)
-   - `sql/04_queries_intermediate.sql` (Part 5)
-   - `sql/05_views.sql` (Part 5)
+## Data model (schema summary)
+Tables (6 total):
+- `providers` — provider dimension (name, type, region, active)
+- `claims` — claims lifecycle fact table (dates, status/decision, payout, processing fields)
+- `medical_codes` — medical code dimension (system, code, title, active)
+- `claim_medical_codes` — bridge table (many-to-many: claims ↔ medical codes)
+- `injury_types` — injury type dimension
+- `claim_injuries` — bridge table (claims ↔ injury types)
 
-## Project structure
-- `sql/` — schema, seed data, queries, views
-- `docs/session_log.md` — running project log (what was done each session)
+## How to run locally (exact commands)
+Prereqs:
+- PostgreSQL 16 installed and running
+- A local database created named `npe_claims_demo`
+
+Create the database (if needed):
+```bash
+createdb npe_claims_demo
