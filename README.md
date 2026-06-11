@@ -24,6 +24,7 @@ Tables (6 total):
 Prereqs:
 - PostgreSQL 16 installed and running
 - A local database created named `npe_claims_demo`
+- ´´´
 
 Create the database (if needed):
 ```bash
