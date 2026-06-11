@@ -20,15 +20,16 @@ Tables (6 total):
 - `injury_types` — injury type dimension
 - `claim_injuries` — bridge table (claims ↔ injury types)
 
-## How to run locally (exact commands)
+## How to run locally
 Prereqs:
 - PostgreSQL 16 installed and running
-- A local database created named `npe_claims_demo`
-- ´´´
+- A local database named `npe_claims_demo`
 
 Create the database (if needed):
-```bash
+
+```
 createdb npe_claims_demo
+```
 
 Run the SQL scripts in order:
 
@@ -41,7 +42,6 @@ psql -d npe_claims_demo -f sql/04_queries_intermediate.sql
 ```
 
 ## Reporting layer & business questions
-
 PostgreSQL holds all the logic. Basic and intermediate queries feed three reporting views that Power BI consumes directly (no base tables):
 
 - `vw_monthly_kpi` — month grain: claims received/closed, approval & rejection rates, payout, processing days
@@ -59,7 +59,6 @@ These answer typical stakeholder questions, each traceable to a view:
 > The dataset is synthetic, so any numbers are illustrative — the point is the traceable SQL reporting layer, not real-world findings.
 
 ## Engineering highlights
-
 - **Star-style schema** — a `claims` fact table with `providers`, `medical_codes` and `injury_types` dimensions, plus bridge tables for the two many-to-many relationships
 - **Integrity enforced in the database** — value whitelists, "Closed requires a decision", `decision_date ≥ received_date`, non-negative amounts
 - **Rerun-friendly synthetic seed** — pure SQL (`TRUNCATE … RESTART IDENTITY`); ~1,200 claims, 39 providers, 84 medical codes
@@ -67,7 +66,6 @@ These answer typical stakeholder questions, each traceable to a view:
 - **Thin Power BI** — imports only the three views, minimal DAX, standardized aggregations (Sum for counts/payout, Average for rates/durations)
 
 ## Dashboard
-
 A three-page Power BI report built directly on the SQL views — Power BI does no business logic, it only presents what the views return.
 
 **Executive Overview** — latest-month KPI cards, monthly claims-received trend, and approval-rate trend.
@@ -82,4 +80,4 @@ A three-page Power BI report built directly on the SQL views — Power BI does n
 
 ![Provider summary](powerbi/screenshots/03_provider_summary.png)
 
-Full write-up: [docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf](docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf)
+Full write-up: [docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf](docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf)Report_Babak_Balouch.pdf)
