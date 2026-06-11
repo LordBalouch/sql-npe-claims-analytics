@@ -70,3 +70,4 @@ These answer typical stakeholder questions, each traceable to a view:
 ![Executive overview](powerbi/screenshots/01_executive_overview.png)
 
 Full write-up: [docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf](docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf)
+``` 
