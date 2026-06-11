@@ -67,7 +67,18 @@ These answer typical stakeholder questions, each traceable to a view:
 
 ## Dashboard
 
+A three-page Power BI report built directly on the SQL views — Power BI does no business logic, it only presents what the views return.
+
+**Executive Overview** — latest-month KPI cards, monthly claims-received trend, and approval-rate trend.
+
 ![Executive overview](powerbi/screenshots/01_executive_overview.png)
 
+**Region Performance** — claims and approval rate by region, a volume-vs-rate scatter (bubble size = payout), and a region KPI table.
+
+![Region performance](powerbi/screenshots/02_region_performance.png)
+
+**Provider Summary** — top providers by approval rate and by total payout, with a sortable provider KPI table and region/type slicers.
+
+![Provider summary](powerbi/screenshots/03_provider_summary.png)
+
 Full write-up: [docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf](docs/SQL_NPE_Claims_Analytics_Report_Babak_Balouch.pdf)
-``` 
